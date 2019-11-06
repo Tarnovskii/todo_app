@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Login} from './components/login-component'
+import s from './App.module.css'
+import {Redirect, Route, Switch} from "react-router-dom";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const isLoggedIn = (url) => {
+        if (!localStorage.token) return (<Redirect to="/login"/>);
+        else if (url) return (<Redirect to={url}/>)
+    };
+
+    return (
+        <div className={s.loginWrapper}>
+            <Switch>
+                <Route path="/register">
+                    {isLoggedIn("/")}
+                    <div>register</div>
+                </Route>
+                <Route path="/login">
+                    {isLoggedIn("/")}
+                    <Login/>
+                </Route>
+                <Route path="/create-note">
+                    {isLoggedIn()}
+                    <div>create-note</div>
+                </Route>
+                <Route path = "/">
+                    {isLoggedIn()}
+                    <div>my-notes</div>
+                </Route>
+            </Switch>
+        </div>
+
+    )
 }
 
 export default App;
